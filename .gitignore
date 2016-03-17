@@ -21,6 +21,8 @@ local.properties
 .loadpath
 *.gif
 *.png
+*.versionsBackup
+.gitignore
 
 
 # External tool builders
