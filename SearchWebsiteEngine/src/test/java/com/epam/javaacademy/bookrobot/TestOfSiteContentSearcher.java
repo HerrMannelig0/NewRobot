@@ -1,10 +1,20 @@
 package com.epam.javaacademy.bookrobot;
-import org.assertj.core.api.Assertions;
+import static org.assertj.core.api.Assertions.*;
 import org.testng.annotations.Test;
-import org.testng.asserts.SoftAssert;
 
 public class TestOfSiteContentSearcher {
 	
+	@Test
+	public void testIfCanFindBodyTagInBlankSite(){
+		//given
+		String htmlAdress = "http://www.blankwebsite.com/";
+		String marker = "<body>";
+		SiteContentSearcher searcher = new SiteContentSearcher();
+		//when
+	    boolean isFound = searcher.isMarkerFound(htmlAdress);
+		//then
+	    assertThat(isFound).isTrue();
+	}
 	
 	
 	
