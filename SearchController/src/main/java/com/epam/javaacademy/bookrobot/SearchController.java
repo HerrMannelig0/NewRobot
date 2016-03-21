@@ -17,7 +17,7 @@ public class SearchController
 	    SiteContentSearcher searcher = new SiteContentSearcher();
 	    
 	    try {
-			searcher.searchOnNexto();
+			searcher.searchOnVirtualo();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

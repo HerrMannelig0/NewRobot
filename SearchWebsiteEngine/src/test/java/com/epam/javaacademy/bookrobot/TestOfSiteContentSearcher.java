@@ -4,10 +4,11 @@ import static org.assertj.core.api.Assertions.*;
 import java.io.IOException;
 import java.util.List;
 
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class TestOfSiteContentSearcher {
-	
 	
 	@Test
 	public void testIfCanFindBodyTagInBlankSite(){
@@ -22,21 +23,27 @@ public class TestOfSiteContentSearcher {
 	}
 	
 	@Test
-	public void testGettingArrayListofBooksFromNEXTO() throws IOException{
+	public void testGettingArrayListofBooksFromNexto() throws IOException{
 		SiteContentSearcher searcher = new SiteContentSearcher();
 		int zero = 0;
-		List<String> bookList = searcher.searchOnNEXTO();
+		List<String> bookList = searcher.searchOnNexto();
 		assertThat(bookList.size()).isGreaterThan(zero);
 	}
 	
 	@Test
-	public void testGettingArrayListofBooksFromWaterstones() throws IOException{
+	public void testGettingArrayListofBooksFromPublio() throws IOException{
 		SiteContentSearcher searcher = new SiteContentSearcher();
 		int zero = 0;
-		List<String> bookList = searcher.searchOnSite();
+		List<String> bookList = searcher.searchOnPublio();
 		assertThat(bookList.size()).isGreaterThan(zero);
 	}
 	
-	
+	@Test
+	public void testGettingArrayListofBooksFromVirtualo() throws IOException{
+		SiteContentSearcher searcher = new SiteContentSearcher();
+		int zero = 0;
+		List<String> bookList = searcher.searchOnVirtualo();
+		assertThat(bookList.size()).isGreaterThan(zero);
+	}
 	
 }
