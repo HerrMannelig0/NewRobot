@@ -2,9 +2,6 @@ package com.epam.javaacademy.bookrobot;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,52 +12,6 @@ import org.jsoup.select.Elements;
 
 public class SiteContentSearcher 
 {
-
-	public ArrayList<String> searchOnSite() throws IOException {
-
-		String url = "https://www.waterstones.com/";
-		String atribute = "alt";
-		
-        Elements elements = getElementsFromSite(url, "img");
-        Element[] elementTable = createElementsTable(elements);
-        
-        return createBooksList(elementTable, atribute);
-        
-	}
-
-	private Element[] createElementsTable(Elements elements) {
-		int size = elements.size();
-        
-        Object [] objectsElementsTable = elements.toArray();
-        Element [] elementTable = new Element[size];
-        for(int i=0; i<size; i++){
-            elementTable[i] = (Element) objectsElementsTable[i];
-        }
-
-		return elementTable;
-	}
-
-	public ArrayList<String> searchOnNEXTO() throws IOException{
-		String url = "http://www.publio.pl/szukaj,darmowe.html";
-		String marker = "h3";
-		Elements elements = getElementsFromSite(url, marker);
-		Element[] elementTable = createElementsTable(elements);
-		ArrayList<String> list = createBooksList(elementTable, "title");
-		return list;
-	}
-	
-	private ArrayList<String> createBooksList(Element[] elementTable, String attribute) {
-		int size = elementTable.length;
-		ArrayList<String> list = new ArrayList<>();
-        for(int i=0; i<size; i++){
-            if(!elementTable[i].attr(attribute).equals("")){
-                String bookName = elementTable[i].attr(attribute);
-                list.add(bookName);
-                System.out.println(i+"\t"+bookName);
-            }
-        }
-		return list;
-	}
 
 	public boolean isMarkerFound(String htmlAdress, String marker){
 		String url = htmlAdress;
@@ -75,12 +26,6 @@ public class SiteContentSearcher
 		return false;
 	}
 	
-	private Elements getElementsFromSite(String url, String marker) throws IOException {
-		Document document = Jsoup.connect(url).followRedirects(false).timeout(60000).get();
-        Elements elements = document.select(marker);
-		return elements;
-	}
-
 	public ArrayList<String> searchOnPublio() throws IOException{
 		
 		String url = "http://www.publio.pl/szukaj,darmowe.html";
@@ -90,16 +35,10 @@ public class SiteContentSearcher
 
         ArrayList<String> titleList = new ArrayList<>();
         
-        for(Element e : divElements){
-        	Elements priceElements = e.select("ins[class=product-tile-price]");
+        for(Element divElement : divElements){
+        	Elements priceElements = divElement.select("ins[class=product-tile-price]");
         	String price = priceElements.html();
-        	Pattern pricePattern = Pattern.compile("0[,.]00.*");
-        	Matcher m = pricePattern.matcher(price);
-        	if(m.matches()){
-        		Elements titleElements = e.select("a[title]");
-        		String title = titleElements.attr("title");
-        		titleList.add(title);
-        	}
+        	addTitlesToArray(titleList, divElement, price);
         }
         
         for (String i : titleList){
@@ -124,17 +63,65 @@ public class SiteContentSearcher
         priceElements.toArray(prices);
         
         int i = 0;
-        for(Element e : aElements){
+        for(Element aElement : aElements){
         	Pattern pricePattern = Pattern.compile("0[,.]00.*");
+        	
         	Matcher m = pricePattern.matcher(prices[i].html());
+        	
         	if(m.matches()){
-        		System.out.println(e.html());
-        		titleList.add(e.html());
+        		System.out.println(aElement.html());
+        		titleList.add(aElement.html());
         	}
         }
-        
 		return titleList;
 	}
 	
+	public ArrayList<String> searchOnVirtualo() throws IOException {
 	
+		String url = "http://virtualo.pl/darmowe/m6/";
+		String marker = "div[class=content]";
+		String priceMarker = "div[class=price]";
+		ArrayList<String> titleList = new ArrayList<>();
+		
+		Document document = Jsoup.connect(url).followRedirects(false).timeout(60000).get();
+        Elements divElements = document.select(marker);
+        	
+        	for(Element divElement : divElements){
+        		Elements priceElements = divElement.select(priceMarker);
+        		Element priceElement = priceElements.first();
+
+        		if(priceElement != null) {
+        			String price = priceElement.html();
+        			
+        			Matcher priceMatcher = matchPrice(price);
+        			
+        			if(priceMatcher.matches()){
+        				Elements titleElements = divElement.select("div[class=title]");
+        				String title = titleElements.html().split("\n")[0];
+        				titleList.add(title);
+	            			
+        				System.out.println(title);
+        			}
+        		}
+            	
+        	}
+        
+        return titleList;
+	}
+   
+	private void addTitlesToArray(ArrayList<String> titleList, Element element, String price) {
+		Matcher m = matchPrice(price);
+
+		if(m.matches()){
+			Elements titleElements = element.select("a[title]");
+			String title = titleElements.attr("title");
+			titleList.add(title);
+		}
+	}
+	
+	private Matcher matchPrice(String price) {
+		Pattern pricePattern = Pattern.compile("0[,.]00.*");
+		Matcher m = pricePattern.matcher(price);
+		return m;
+	}
 }
