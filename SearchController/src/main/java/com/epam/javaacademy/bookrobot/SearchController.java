@@ -11,16 +11,12 @@ import org.apache.log4j.PatternLayout;
 
 public class SearchController 
 {
-    public static void main( String[] args )
+    public static void main( String[] args ) throws IOException
     {
     	logForStart();
 	    SiteContentSearcher searcher = new SiteContentSearcher();
 	    
-	    try {
-			searcher.searchOnVirtualo();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	    searcher.searchAllSitesForBooks(new CompleteListOfURLs());
     }
 
 	private static void logForStart() {

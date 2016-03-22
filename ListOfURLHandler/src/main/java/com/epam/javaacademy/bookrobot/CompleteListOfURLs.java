@@ -18,12 +18,12 @@ public class CompleteListOfURLs {
 	private static final Pattern URLPATTERN = Pattern.compile(
 			"(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)"
 					+ "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*"
-					+ "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
+					+ "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{}']*)",
 					Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
 	
 	public Map <URL, ArrayList <String> > createMap () {
 		
-		ArrayList <URL> URLs;
+		ArrayList<URL> URLs;
 		ListOfURLToDig listOfWebsites = new ListOfURLToDig();
 		URLs = listOfWebsites.getURLList();
 		
@@ -54,7 +54,10 @@ public class CompleteListOfURLs {
 		    int matchStart = matcher.start(1);
 		    int matchEnd = matcher.end();
 
-		    result.add(webContent.substring(matchStart, matchEnd));
+		    String substring = webContent.substring(matchStart, matchEnd);
+		    if (substring.contains(".jpg") || substring.contains(".png") || substring.contains(".js") || substring.contains(".dtd")) continue;
+		    
+			result.add(substring);
 		}
 		
 		return result;
@@ -72,7 +75,6 @@ public class CompleteListOfURLs {
 				else result.add(fetchedURLs.get(j));
 			}
 		}
-		
 		return result;
 	}
 	

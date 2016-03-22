@@ -10,9 +10,13 @@ public class ListOfURLToDig {
 
 	public ListOfURLToDig() {
 		try {
-			URLs.add(new URL("http://www.nexto.pl"));
+			/*URLs.add(new URL("http://www.nexto.pl"));
 			URLs.add(new URL("https://woblink.com"));
 			URLs.add(new URL("http://www.publio.pl"));
+			URLs.add(new URL("http://virtualo.pl"));*/
+			URLs.add(new URL("http://virtualo.pl/darmowe/m6/"));
+			URLs.add(new URL("http://www.publio.pl/szukaj,darmowe.html"));
+			URLs.add(new URL("http://www.nexto.pl/ebooki/darmowe_c1219.xml"));
 		} catch (MalformedURLException e) {
 			System.err.println("Cannot make default list of books!");
 		}
@@ -26,7 +30,6 @@ public class ListOfURLToDig {
 			return false;
 		}
 		return true;
-
 	}
 	
 	public boolean delURL (String website){

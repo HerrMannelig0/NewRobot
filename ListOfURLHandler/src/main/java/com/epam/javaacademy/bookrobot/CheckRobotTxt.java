@@ -5,16 +5,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
-
 
 public class CheckRobotTxt 
 {
-
     public HashSet <String> listOfUnallowedURLs (URL urlToCheck){
     	HashSet <String> unallowedList = new HashSet<>();
+    	
     	try {
 			String web = urlToCheck.getHost().toLowerCase();
 			String line;
@@ -41,10 +38,6 @@ public class CheckRobotTxt
 		}
     	
 		return unallowedList;
-    	
-    	
-    	
-    	
     }
 
 

@@ -22,7 +22,7 @@ public class TestOfSiteContentSearcher {
 	    assertThat(isFound).isTrue();
 	}
 	
-	@Test
+	/*@Test
 	public void testGettingArrayListofBooksFromNexto() throws IOException{
 		SiteContentSearcher searcher = new SiteContentSearcher();
 		int zero = 0;
@@ -44,6 +44,6 @@ public class TestOfSiteContentSearcher {
 		int zero = 0;
 		List<String> bookList = searcher.searchOnVirtualo();
 		assertThat(bookList.size()).isGreaterThan(zero);
-	}
+	}*/
 	
 }

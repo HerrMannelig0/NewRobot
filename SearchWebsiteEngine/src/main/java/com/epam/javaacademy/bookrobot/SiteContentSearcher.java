@@ -1,11 +1,24 @@
 package com.epam.javaacademy.bookrobot;
 
 import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.assertj.core.data.MapEntry;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
+import org.jsoup.UnsupportedMimeTypeException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -26,19 +39,85 @@ public class SiteContentSearcher
 		return false;
 	}
 	
-	public ArrayList<String> searchOnPublio() throws IOException{
+	public Map<String, String> searchAllSitesForBooks(CompleteListOfURLs urlsMap) throws IOException{
+		Map<String, String> booksMap = new HashMap<String, String>();
 		
-		String url = "http://www.publio.pl/szukaj,darmowe.html";
+		Map <URL, ArrayList <String> > siteMap = urlsMap.createMap();
+
+		for(Entry<URL, ArrayList<String>> entry : siteMap.entrySet()){
+			ArrayList<String> storesList = entry.getValue();
+			HashSet<String> storesSet = convertToSet(storesList);
+			for(String adress : storesSet){
+				System.out.println(adress+ "\t" + Files.probeContentType(Paths.get(adress)));
+				ArrayList<String> foundBooksList = searchInSite(adress);
+				System.out.println(foundBooksList.size());
+				
+				for(String s : foundBooksList){
+					booksMap.put(s, adress);
+				}	
+			}
+		}
+		
+		showMap(booksMap);
+		
+		return booksMap;
+	}
+	
+	private void showMap(Map<String, String> booksMap) {
+		System.out.println(); System.out.println();
+		for(Entry<String, String> entry : booksMap.entrySet()){
+			System.out.println(entry.getValue() + "\t///\t" + entry.getKey());
+		}
+		
+	}
+
+	private HashSet<String> convertToSet(List<String> list){
+			HashSet<String> set = new HashSet<>();
+				for(String s : list) set.add(s);
+			return set;
+	
+	}
+	
+	private ArrayList<String> searchInSite(String url) throws IOException {
+		ArrayList<String> list = new ArrayList<>();
+		System.out.println(url);
+		if(!url.endsWith("jpg") && !url.endsWith("png") && !url.endsWith("ico") && !url.endsWith("js") && 
+				(Files.probeContentType(Paths.get(url))) == null || (Files.probeContentType(Paths.get(url))).equals("application/xml")
+						|| (Files.probeContentType(Paths.get(url)).equals("text/html"))){
+			System.err.println(url);
+			try {
+				list.addAll(searchOnNexto(url));
+				list.addAll(searchOnPublio(url));
+				list.addAll(searchOnVirtualo(url));
+			} catch (HttpStatusException e) {
+				e.printStackTrace();
+			} catch (UnsupportedMimeTypeException e){
+				e.printStackTrace();
+			} catch (IllegalArgumentException e){
+				e.printStackTrace();
+			} catch (IOException e){
+				e.printStackTrace();
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+			
+		}
+		return list;
+	}
+
+	public ArrayList<String> searchOnPublio(String url) throws IOException{
+		
+	//	String url = "http://www.publio.pl/szukaj,darmowe.html";
 		String marker = "div[class=product-tile-price-wrapper]";
 		Document document = Jsoup.connect(url).followRedirects(false).timeout(60000).get();
         Elements divElements = document.select(marker);
-
+        
         ArrayList<String> titleList = new ArrayList<>();
         
         for(Element divElement : divElements){
         	Elements priceElements = divElement.select("ins[class=product-tile-price]");
         	String price = priceElements.html();
-        	addTitlesToArray(titleList, divElement, price);
+        	addTitlesToList(titleList, divElement, price);
         }
         
         for (String i : titleList){
@@ -48,9 +127,10 @@ public class SiteContentSearcher
         return titleList; 
 	}
 	
-	public ArrayList<String> searchOnNexto() throws IOException {
+	public ArrayList<String> searchOnNexto(String url) throws IOException {
 		
-		String url = "http://www.nexto.pl/ebooki/darmowe_c1219.xml";
+	//	String url = "http://www.nexto.pl/ebooki/darmowe_c1219.xml";
+
 		String marker = "a[class=title]";
 		String priceMarker = "strong[class=nprice]";
 		ArrayList<String> titleList = new ArrayList<>();
@@ -76,9 +156,9 @@ public class SiteContentSearcher
 		return titleList;
 	}
 	
-	public ArrayList<String> searchOnVirtualo() throws IOException {
-	
-		String url = "http://virtualo.pl/darmowe/m6/";
+	public ArrayList<String> searchOnVirtualo(String url) throws IOException {
+		
+		//String url = "http://virtualo.pl/darmowe/m6/";
 		String marker = "div[class=content]";
 		String priceMarker = "div[class=price]";
 		ArrayList<String> titleList = new ArrayList<>();
@@ -109,7 +189,7 @@ public class SiteContentSearcher
         return titleList;
 	}
    
-	private void addTitlesToArray(ArrayList<String> titleList, Element element, String price) {
+	private void addTitlesToList(ArrayList<String> titleList, Element element, String price) {
 		Matcher m = matchPrice(price);
 
 		if(m.matches()){
@@ -124,4 +204,6 @@ public class SiteContentSearcher
 		Matcher m = pricePattern.matcher(price);
 		return m;
 	}
+
+	
 }
