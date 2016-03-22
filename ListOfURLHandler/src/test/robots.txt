@@ -1,0 +1,7 @@
+# some comments
+
+User-agent: *
+Allow: /
+Disallow: /ajax/
+Disallow: /koszyk/
+Disallow: /logowanie/
