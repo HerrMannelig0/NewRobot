@@ -9,7 +9,6 @@ public class SearchController
     {
     	logForProgramStart();
 	    SiteContentSearcher searcher = new SiteContentSearcher();
-	    
 	    searcher.searchAllSitesForBooks(new CompleteListOfURLs());
     }
 

@@ -58,11 +58,7 @@
 			<artifactId>mockito-all</artifactId>
 			<version>1.9.5</version>
 		</dependency>
-		<dependency>
-    	<groupId>com.epam.javaacademy.bookrobot</groupId>
-    	<artifactId>SearchWebsiteEngine</artifactId>
-    	<version>1.0.0</version>
-    </dependency>
+		
 	</dependencies>
 
 </project>

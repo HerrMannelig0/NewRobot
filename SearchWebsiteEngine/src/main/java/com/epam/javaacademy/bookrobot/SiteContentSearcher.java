@@ -1,5 +1,15 @@
 package com.epam.javaacademy.bookrobot;
 
+import com.epam.javaacademy.bookrobot.CompleteListOfURLs;
+
+import static com.epam.javaacademy.bookrobot.SearchingLogger.logForHttpStatusException;
+import static com.epam.javaacademy.bookrobot.SearchingLogger.logForIOException;
+import static com.epam.javaacademy.bookrobot.SearchingLogger.logForIllegalArgumentException;
+import static com.epam.javaacademy.bookrobot.SearchingLogger.logForOtherException;
+import static com.epam.javaacademy.bookrobot.SearchingLogger.logForSearchingStart;
+import static com.epam.javaacademy.bookrobot.SearchingLogger.logForUnsupportedMimeTypeException;
+import static com.epam.javaacademy.bookrobot.SearchingLogger.logFoundBooksNumber;
+
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -19,8 +29,6 @@ import org.jsoup.UnsupportedMimeTypeException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import static com.epam.javaacademy.bookrobot.SearchingLogger.*;
 
 public class SiteContentSearcher 
 {
@@ -56,11 +64,12 @@ public class SiteContentSearcher
 				for(String s : foundBooksList){
 					booksMap.put(s, adress);
 				}	
-			}
+					
+		String url = "http://www.publio.pl/szukaj,darmowe.html";}
 		}
 		
-		showMap(booksMap);
-		
+		BooksToFileWriter writer = new BooksToFileWriter();
+		writer.write(booksMap);
 		logFoundBooksNumber(booksMap.size());
 		return booksMap;
 	}
@@ -108,8 +117,7 @@ public class SiteContentSearcher
 	}
 
 	public ArrayList<String> searchOnPublio(String url) throws IOException{
-		
-	//	String url = "http://www.publio.pl/szukaj,darmowe.html";
+
 		String marker = "div[class=product-tile-price-wrapper]";
 		Document document = Jsoup.connect(url).followRedirects(false).timeout(60000).get();
         Elements divElements = document.select(marker);
@@ -157,8 +165,7 @@ public class SiteContentSearcher
 	}
 	
 	public ArrayList<String> searchOnVirtualo(String url) throws IOException {
-		
-		//String url = "http://virtualo.pl/darmowe/m6/";
+
 		String marker = "div[class=content]";
 		String priceMarker = "div[class=price]";
 		ArrayList<String> titleList = new ArrayList<>();
