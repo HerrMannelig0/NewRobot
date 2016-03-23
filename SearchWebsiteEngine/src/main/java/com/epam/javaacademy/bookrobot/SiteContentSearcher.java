@@ -3,7 +3,6 @@ package com.epam.javaacademy.bookrobot;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,11 +10,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.assertj.core.data.MapEntry;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.UnsupportedMimeTypeException;
@@ -23,8 +20,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import static com.epam.javaacademy.bookrobot.SearchingLogger.*;
+
 public class SiteContentSearcher 
 {
+	SearchingLogger logger = new SearchingLogger();
 
 	public boolean isMarkerFound(String htmlAdress, String marker){
 		String url = htmlAdress;
@@ -41,9 +41,10 @@ public class SiteContentSearcher
 	
 	public Map<String, String> searchAllSitesForBooks(CompleteListOfURLs urlsMap) throws IOException{
 		Map<String, String> booksMap = new HashMap<String, String>();
-		
 		Map <URL, ArrayList <String> > siteMap = urlsMap.createMap();
 
+		logForSearchingStart();
+		
 		for(Entry<URL, ArrayList<String>> entry : siteMap.entrySet()){
 			ArrayList<String> storesList = entry.getValue();
 			HashSet<String> storesSet = convertToSet(storesList);
@@ -60,6 +61,7 @@ public class SiteContentSearcher
 		
 		showMap(booksMap);
 		
+		logFoundBooksNumber(booksMap.size());
 		return booksMap;
 	}
 	
@@ -90,15 +92,15 @@ public class SiteContentSearcher
 				list.addAll(searchOnPublio(url));
 				list.addAll(searchOnVirtualo(url));
 			} catch (HttpStatusException e) {
-				e.printStackTrace();
+				logForHttpStatusException();
 			} catch (UnsupportedMimeTypeException e){
-				e.printStackTrace();
+				logForUnsupportedMimeTypeException();
 			} catch (IllegalArgumentException e){
-				e.printStackTrace();
+				logForIllegalArgumentException();
 			} catch (IOException e){
-				e.printStackTrace();
+				logForIOException();
 			} catch (Exception e){
-				e.printStackTrace();
+				logForOtherException();
 			}
 			
 		}
@@ -129,8 +131,6 @@ public class SiteContentSearcher
 	
 	public ArrayList<String> searchOnNexto(String url) throws IOException {
 		
-	//	String url = "http://www.nexto.pl/ebooki/darmowe_c1219.xml";
-
 		String marker = "a[class=title]";
 		String priceMarker = "strong[class=nprice]";
 		ArrayList<String> titleList = new ArrayList<>();
