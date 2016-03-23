@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -14,12 +17,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class BooksToFileWriter {
-	private BufferedWriter writer;
+	private PrintWriter writer;
 	
 	public BooksToFileWriter() {
 		File file = new File("../FoundBooks.txt");
 		try {
-			writer = new BufferedWriter(new FileWriter(file.getAbsoluteFile()));
+			writer = new PrintWriter(new BufferedWriter(new FileWriter(file.getAbsoluteFile(), true)));
 		} catch (FileNotFoundException e) {
 			logForImpossibilityToFindTheFileToWriteIn();
 		} catch (IOException e){
@@ -36,6 +39,8 @@ public class BooksToFileWriter {
 		for(Entry<String, String> entry : map.entrySet()){
 			writer.write(entry.getKey() + "\t\t\t" + entry.getValue() + "\n");
 		}
+		
+		writer.write("#################################################################");
 		
 		writer.close();
 		
