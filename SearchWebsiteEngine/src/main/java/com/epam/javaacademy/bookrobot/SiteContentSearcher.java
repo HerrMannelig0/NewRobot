@@ -47,6 +47,13 @@ public class SiteContentSearcher
 		return false;
 	}
 	
+	/**
+	 * Creating a Map<String, String> where key i a book's name and value is a url of the book store's site.
+	 * 
+	 * @param CompleteListOfURLs urlsMap
+	 * @return Map
+	 * @throws IOException
+	 */
 	public Map<String, String> searchAllSitesForBooks(CompleteListOfURLs urlsMap) throws IOException{
 		Map<String, String> booksMap = new HashMap<String, String>();
 		Map <URL, ArrayList <String> > siteMap = urlsMap.createMap();
@@ -63,9 +70,8 @@ public class SiteContentSearcher
 				
 				for(String s : foundBooksList){
 					booksMap.put(s, adress);
-				}	
-					
-		String url = "http://www.publio.pl/szukaj,darmowe.html";}
+				}
+			}
 		}
 		
 		BooksToFileWriter writer = new BooksToFileWriter();
@@ -82,6 +88,12 @@ public class SiteContentSearcher
 		
 	}
 
+	/**
+	 * Converting List to Set
+	 * 
+	 * @param List list)
+	 * @return HashSet
+	 */
 	private HashSet<String> convertToSet(List<String> list){
 			HashSet<String> set = new HashSet<>();
 				for(String s : list) set.add(s);
@@ -89,7 +101,13 @@ public class SiteContentSearcher
 	
 	}
 	
-	private ArrayList<String> searchInSite(String url) throws IOException {
+	/**
+	 * Creating an ArrayList of names of books found in the site.
+	 * @param String url
+	 * @return ArrayList
+	 * @throws IOException
+	 */
+	protected ArrayList<String> searchInSite(String url) throws IOException {
 		ArrayList<String> list = new ArrayList<>();
 		System.out.println(url);
 		if(!url.endsWith("jpg") && !url.endsWith("png") && !url.endsWith("ico") && !url.endsWith("js") && 
@@ -116,7 +134,7 @@ public class SiteContentSearcher
 		return list;
 	}
 
-	public ArrayList<String> searchOnPublio(String url) throws IOException{
+	ArrayList<String> searchOnPublio(String url) throws IOException{
 
 		String marker = "div[class=product-tile-price-wrapper]";
 		Document document = Jsoup.connect(url).followRedirects(false).timeout(60000).get();
@@ -137,7 +155,7 @@ public class SiteContentSearcher
         return titleList; 
 	}
 	
-	public ArrayList<String> searchOnNexto(String url) throws IOException {
+	ArrayList<String> searchOnNexto(String url) throws IOException {
 		
 		String marker = "a[class=title]";
 		String priceMarker = "strong[class=nprice]";
@@ -164,7 +182,7 @@ public class SiteContentSearcher
 		return titleList;
 	}
 	
-	public ArrayList<String> searchOnVirtualo(String url) throws IOException {
+	ArrayList<String> searchOnVirtualo(String url) throws IOException {
 
 		String marker = "div[class=content]";
 		String priceMarker = "div[class=price]";
