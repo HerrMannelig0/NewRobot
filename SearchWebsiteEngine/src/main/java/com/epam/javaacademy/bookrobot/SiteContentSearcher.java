@@ -1,13 +1,6 @@
 package com.epam.javaacademy.bookrobot;
 
-import com.epam.javaacademy.bookrobot.CompleteListOfURLs;
-
-import static com.epam.javaacademy.bookrobot.SearchingLogger.logForHttpStatusException;
-import static com.epam.javaacademy.bookrobot.SearchingLogger.logForIOException;
-import static com.epam.javaacademy.bookrobot.SearchingLogger.logForIllegalArgumentException;
-import static com.epam.javaacademy.bookrobot.SearchingLogger.logForOtherException;
 import static com.epam.javaacademy.bookrobot.SearchingLogger.logForSearchingStart;
-import static com.epam.javaacademy.bookrobot.SearchingLogger.logForUnsupportedMimeTypeException;
 import static com.epam.javaacademy.bookrobot.SearchingLogger.logFoundBooksNumber;
 
 import java.io.IOException;
@@ -23,9 +16,7 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
-import org.jsoup.UnsupportedMimeTypeException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -68,9 +59,7 @@ public class SiteContentSearcher
 				ArrayList<String> foundBooksList = searchInSite(adress);
 				System.out.println(foundBooksList.size());
 				
-				for(String s : foundBooksList){
-					booksMap.put(s, adress);
-				}
+				putBooksIntoMap(booksMap, adress, foundBooksList);
 			}
 		}
 		
@@ -79,15 +68,13 @@ public class SiteContentSearcher
 		logFoundBooksNumber(booksMap.size());
 		return booksMap;
 	}
-	
-	private void showMap(Map<String, String> booksMap) {
-		System.out.println(); System.out.println();
-		for(Entry<String, String> entry : booksMap.entrySet()){
-			System.out.println(entry.getValue() + "\t///\t" + entry.getKey());
-		}
-		
-	}
 
+	private void putBooksIntoMap(Map<String, String> booksMap, String adress, ArrayList<String> foundBooksList) {
+		for(String s : foundBooksList){
+			booksMap.put(s, adress);
+		}
+	}
+	
 	/**
 	 * Converting List to Set
 	 * 
@@ -107,30 +94,16 @@ public class SiteContentSearcher
 	 * @return ArrayList
 	 * @throws IOException
 	 */
-	protected ArrayList<String> searchInSite(String url) throws IOException {
+	protected ArrayList<String> searchInSite(String url) {
 		ArrayList<String> list = new ArrayList<>();
 		System.out.println(url);
-		if(!url.endsWith("jpg") && !url.endsWith("png") && !url.endsWith("ico") && !url.endsWith("js") && 
-				(Files.probeContentType(Paths.get(url))) == null || (Files.probeContentType(Paths.get(url))).equals("application/xml")
-						|| (Files.probeContentType(Paths.get(url)).equals("text/html"))){
-			System.err.println(url);
 			try {
 				list.addAll(searchOnNexto(url));
 				list.addAll(searchOnPublio(url));
 				list.addAll(searchOnVirtualo(url));
-			} catch (HttpStatusException e) {
-				logForHttpStatusException();
-			} catch (UnsupportedMimeTypeException e){
-				logForUnsupportedMimeTypeException();
-			} catch (IllegalArgumentException e){
-				logForIllegalArgumentException();
-			} catch (IOException e){
-				logForIOException();
-			} catch (Exception e){
-				logForOtherException();
+			} catch (Exception e) {			
+				SearchingLogger.logException(url, e.getMessage(), e.getClass());				
 			}
-			
-		}
 		return list;
 	}
 
@@ -208,7 +181,6 @@ public class SiteContentSearcher
         				System.out.println(title);
         			}
         		}
-            	
         	}
         
         return titleList;

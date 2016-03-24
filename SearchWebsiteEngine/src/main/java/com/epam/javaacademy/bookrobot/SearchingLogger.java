@@ -1,6 +1,7 @@
 package com.epam.javaacademy.bookrobot;
 
 import java.io.IOException;
+
 import org.apache.log4j.Appender;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.FileAppender;
@@ -13,25 +14,14 @@ public class SearchingLogger {
 	
 	static Logger logger = addLoggerSettings();
 	
-	public static void logForHttpStatusException() {
-		logger.error("HttpStatusException occured");
+	public static void logException(String url, String message, Class<? extends Exception> exceptionClass) {
+		logger.error("Exception occured:\t" + url + "\t" + exceptionClass.toString() + "\t" + message);
 	}
 	
-	public static void logForUnsupportedMimeTypeException() {
-		logger.error("UnsuportedMimeTypeException occured");
+	public static void logForIOException(String url) {
+		logger.error("IOException occured\t" + url);
 	}
 	
-	public static void logForIllegalArgumentException() {
-		logger.error("IllegalArgumentException occured");
-	}
-	
-	public static void logForIOException() {
-		logger.error("IOException occured");
-	}
-	
-	public static void logForOtherException() {
-		logger.error("Other type of exception occured");
-	}
 
 	public static void logFoundBooksNumber(int n){
 		logger.info(n + " free books have been found");

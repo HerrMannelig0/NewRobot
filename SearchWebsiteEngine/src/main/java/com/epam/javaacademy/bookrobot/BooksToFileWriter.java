@@ -1,6 +1,7 @@
 package com.epam.javaacademy.bookrobot;
 
-import static com.epam.javaacademy.bookrobot.SearchingLogger.*;
+import static com.epam.javaacademy.bookrobot.SearchingLogger.logForIOException;
+import static com.epam.javaacademy.bookrobot.SearchingLogger.logForImpossibilityToFindTheFileToWriteIn;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,8 +9,6 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -26,7 +25,7 @@ public class BooksToFileWriter {
 		} catch (FileNotFoundException e) {
 			logForImpossibilityToFindTheFileToWriteIn();
 		} catch (IOException e){
-			logForIOException();
+			logForIOException("Problems with writing books in file");
 		}
 	}
 	
