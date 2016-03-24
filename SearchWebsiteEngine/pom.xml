@@ -78,6 +78,7 @@
       </dependency>
       <dependency>
         <groupId>org.apache.logging.log4j</groupId>
+	
         <artifactId>log4j-core</artifactId>
         <version>2.5</version>
       </dependency>
@@ -100,11 +101,7 @@
 	  <version>6.8</version>
 	  <scope>test</scope>
 	</dependency>
-	<dependency>
-    	<groupId>com.epam.javaacademy.bookrobot</groupId>
-    	<artifactId>ListOfURLHandler</artifactId>
-    	<version>1.0.0</version>
-    </dependency>
+
   </dependencies>
   
 </project>
