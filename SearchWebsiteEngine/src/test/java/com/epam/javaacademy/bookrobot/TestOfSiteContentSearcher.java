@@ -50,6 +50,7 @@ public class TestOfSiteContentSearcher {
 	
 	@Test
 	public void testIfSearcherCreatesNewSitesMap() throws IOException {
+		
 		CompleteListOfURLs urls = mock(CompleteListOfURLs.class);
 		
 		String urlToCheck = "http://www.nexto.pl/ebooki/darmowe_c1219.xml";
@@ -65,6 +66,30 @@ public class TestOfSiteContentSearcher {
 		searcher.searchAllSitesForBooks(urls);
 		
 		verify(urls).createMap();
+	}
+	
+	@Test
+	public void testSearchingOnPublio() throws IOException {
+		int zero = 0;
+		String urlToCheck = "http://www.publio.pl/szukaj,darmowe.html";
+		ArrayList<String> list = searcher.searchOnPublio(urlToCheck);
+		assertThat(list.size()).isGreaterThan(zero);
+	}
+	
+	@Test
+	public void testSearchingOnNexto() throws IOException {
+		int zero = 0;
+		String urlToCheck = "http://www.nexto.pl/ebooki/darmowe_c1219.xml";
+		ArrayList<String> list = searcher.searchOnNexto(urlToCheck);
+		assertThat(list.size()).isGreaterThan(zero);
+	}
+	
+	@Test
+	public void testSearchingOnVirtualo() throws IOException {
+		int zero = 0;
+		String urlToCheck = "http://virtualo.pl/darmowe/m6/";
+		ArrayList<String> list = searcher.searchOnVirtualo(urlToCheck);
+		assertThat(list.size()).isGreaterThan(zero);
 	}
 	
 }

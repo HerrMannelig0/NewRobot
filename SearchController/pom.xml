@@ -83,11 +83,7 @@
   <version>3.3.0</version>
   <scope>test</scope>
 </dependency>
-    <dependency>
-    	<groupId>com.epam.javaacademy.bookrobot</groupId>
-    	<artifactId>SearchWebsiteEngine</artifactId>
-    	<version>1.0.0</version>
-    </dependency>
+    
   
   </dependencies>
 </project>

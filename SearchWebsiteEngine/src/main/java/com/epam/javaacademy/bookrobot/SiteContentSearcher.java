@@ -55,8 +55,9 @@ public class SiteContentSearcher
 			ArrayList<String> storesList = entry.getValue();
 			HashSet<String> storesSet = convertToSet(storesList);
 			for(String adress : storesSet){
-				System.out.println(adress+ "\t" + Files.probeContentType(Paths.get(adress)));
 				ArrayList<String> foundBooksList = searchInSite(adress);
+				
+				System.out.println(adress);
 				System.out.println(foundBooksList.size());
 				
 				putBooksIntoMap(booksMap, adress, foundBooksList);
@@ -96,7 +97,6 @@ public class SiteContentSearcher
 	 */
 	protected ArrayList<String> searchInSite(String url) {
 		ArrayList<String> list = new ArrayList<>();
-		System.out.println(url);
 			try {
 				list.addAll(searchOnNexto(url));
 				list.addAll(searchOnPublio(url));
@@ -148,7 +148,6 @@ public class SiteContentSearcher
         	Matcher m = pricePattern.matcher(prices[i].html());
         	
         	if(m.matches()){
-        		System.out.println(aElement.html());
         		titleList.add(aElement.html());
         	}
         }
@@ -177,8 +176,7 @@ public class SiteContentSearcher
         				Elements titleElements = divElement.select("div[class=title]");
         				String title = titleElements.html().split("\n")[0];
         				titleList.add(title);
-	            			
-        				System.out.println(title);
+	            	
         			}
         		}
         	}

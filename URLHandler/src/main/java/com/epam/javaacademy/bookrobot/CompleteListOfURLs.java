@@ -43,9 +43,9 @@ public class CompleteListOfURLs {
 			firstIterlistOfURLs.addAll(listOfURLs);
 			createURLs(firstIterlistOfURLs);
 			sectIterlistOfURLs.addAll(listOfURLs);
-		/*	createURLs(sectIterlistOfURLs);
+			createURLs(sectIterlistOfURLs);
 			thirdIterlistOfURLs.addAll(listOfURLs);
-			createURLs(thirdIterlistOfURLs);*/
+			createURLs(thirdIterlistOfURLs);
 			urlMap.put(key, listOfURLs);
 		}
 
@@ -90,7 +90,7 @@ public class CompleteListOfURLs {
 			return buffer.toString();
 
 		} catch (IOException e) {
-			//System.err.println("Cannot download page.");
+			//TODO: Here should be logging
 		}
 
 		return null;

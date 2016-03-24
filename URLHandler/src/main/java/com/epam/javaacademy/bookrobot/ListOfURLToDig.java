@@ -11,9 +11,9 @@ public class ListOfURLToDig {
 	public ListOfURLToDig() {
 		try {
 			URLs.add(new URL("https://www.nexto.pl"));
-		//	URLs.add(new URL("https://woblink.com"));
-		//	URLs.add(new URL("http://www.publio.pl"));
-		//	URLs.add(new URL("http://virtualo.pl"));
+			URLs.add(new URL("https://woblink.com"));
+			URLs.add(new URL("http://www.publio.pl"));
+			URLs.add(new URL("http://virtualo.pl"));
 		} catch (MalformedURLException e) {
 			System.err.println("Cannot make default list of books!");
 		}

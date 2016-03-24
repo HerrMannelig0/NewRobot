@@ -40,7 +40,7 @@ public class SearchingLogger {
 	}
 	
 	private static Logger addLoggerSettings() {
-		Layout layout = new PatternLayout("[%p] %c - %m - Data wpisu: %d %n");
+		Layout layout = new PatternLayout("[%p] %c - %m - Date: %d %n");
 		Appender appender = createAppender(layout);
 		
 		BasicConfigurator.configure(appender);
