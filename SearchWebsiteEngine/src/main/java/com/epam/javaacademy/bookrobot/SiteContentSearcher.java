@@ -74,8 +74,7 @@ public class SiteContentSearcher
 			}
 		}
 		
-		BooksToFileWriter writer = new BooksToFileWriter();
-		writer.write(booksMap);
+		
 		logFoundBooksNumber(booksMap.size());
 		return booksMap;
 	}
